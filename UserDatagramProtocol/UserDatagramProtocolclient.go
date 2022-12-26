@@ -8,7 +8,7 @@ import (
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/config"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/counter"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/netutil"
-
+	"github.com/komeilkma/Terminator-Samurai-VPN/native-water"
 )
 func (c *Client) tunToUdp() {
 	packet := make([]byte, c.config.BufferSize)

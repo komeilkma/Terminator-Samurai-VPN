@@ -7,6 +7,7 @@ import (
 	"time"
 	"github.com/golang/snappy"
 	"github.com/lucas-clemente/quic-go"
+	"github.com/komeilkma/Terminator-Samurai-VPN/native-water"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/cache"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/cipher"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/config"
