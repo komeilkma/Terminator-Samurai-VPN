@@ -1,7 +1,7 @@
 //go:build windows
 // +build windows
 
-package water
+package native-water
 
 // PlatformSpecificParams defines parameters in Config that are specific to
 // Windows. A zero-value of such type is valid.
@@ -16,7 +16,7 @@ type PlatformSpecificParams struct {
 	// the adapter using syscall, just like openDev().
 	// For detail, please refer
 	// https://github.com/OpenVPN/tap-windows6/blob/master/src/device.c#L431
-	// and https://github.com/songgao/water/pull/13#issuecomment-270341777
+	// and https://github.com/songgao/native-water/pull/13#issuecomment-270341777
 	Network []string
 }
 

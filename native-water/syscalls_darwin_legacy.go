@@ -1,6 +1,6 @@
 // +build darwin,!go1.11
 
-package water
+package native-water
 
 func setNonBlock(fd int) error {
 	// There's a but pre-go1.11 that causes 'resource temporarily unavailable'

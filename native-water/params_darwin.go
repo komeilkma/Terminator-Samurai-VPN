@@ -1,7 +1,7 @@
 //go:build darwin
 // +build darwin
 
-package water
+package native-water
 
 // MacOSDriverProvider enumerates possible MacOS TUN/TAP implementations
 type MacOSDriverProvider int
@@ -35,7 +35,7 @@ type PlatformSpecificParams struct {
 	// the adapter using syscall, just like openDev().
 	// For detail, please refer
 	// https://github.com/OpenVPN/tap-windows6/blob/master/src/device.c#L431
-	// and https://github.com/songgao/water/pull/13#issuecomment-270341777
+	// and https://github.com/songgao/native-water/pull/13#issuecomment-270341777
 	Network []string
 }
 

@@ -5,6 +5,7 @@ import (
 	"net"
 	"time"
 	"github.com/gobwas/ws"
+	"github.com/komeilkma/Terminator-Samurai-VPN/native-water"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/cache"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/cipher"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/config"
@@ -12,7 +13,6 @@ import (
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/netutil"
 	"github.com/gobwas/ws/wsutil"
 	"github.com/golang/snappy"
-
 )
 
 func StartClient(iface *water.Interface, config config.Config) {

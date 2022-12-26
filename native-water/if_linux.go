@@ -1,4 +1,4 @@
-package water
+package native-water
 
 import (
 	"fmt"
