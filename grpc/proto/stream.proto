@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/komeilkma/Terminator-Samurai-VPN/grpc/proto";
+
+message PacketData {
+  bytes data = 1;
+}
+
+service GrpcServe {
+  rpc Tunnel(stream PacketData)
+      returns(stream PacketData){};
+}
