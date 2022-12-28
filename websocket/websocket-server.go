@@ -17,7 +17,7 @@ import (
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/netutil"
 	"github.com/gobwas/ws/wsutil"
 	"github.com/golang/snappy"
-	"github.com/komeilkma/Terminator-Samurai-VPN/register"
+	"github.com/komeilkma/Terminator-Samurai-VPN/clientside"
 )
 
 func StartServer(iface *water.Interface, config config.Config) {
