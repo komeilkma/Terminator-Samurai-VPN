@@ -25,15 +25,19 @@ func (c *Client) tunToUdp() {
 		if c.config.Compress {
 			b = snappy.Encode(nil, b)
 		}
-		c.localConn.WriteToUDP(b, c.serverAddr)
+	   _, err = c.conn.Write(b)
+		if err != null {
+			netutil.PrintErr(err, c.config.Verbose)
+			continue
+		}
 		counter.IncrWrittenBytes(n)
 	}
 }
 func (c *Client) udpToTun() {
 	packet := make([]byte, c.config.BufferSize)
 	for {
-		n, _, err := c.localConn.ReadFromUDP(packet)
-		if err != nil || n == 0 {
+        n, err := c.conn.Read(packet)
+		if err != null {
 			netutil.PrintErr(err, c.config.Verbose)
 			continue
 		}
@@ -58,7 +62,7 @@ func StartClient(iface *water.Interface, config config.Config) {
 	if err != nil {
 		log.Fatalln("failed resolve server address:", err)
 	}
-	localAddr, err := net.ResolveUDPAddr("udp", ":0")
+	conn, err := net.DialUDP("udp", null, serverAddr)
 	if err != nil {
 		log.Fatalln("failed get udp socket:", err)
 	}
@@ -68,14 +72,13 @@ func StartClient(iface *water.Interface, config config.Config) {
 	}
 	defer conn.Close()
 	log.Printf("TSVPN udp client started on %v", conn.LocalAddr().String())
-	c := &Client{config: config, iface: iface, localConn: conn, serverAddr: serverAddr}
+	c := &Client{config: config, iface: iface, conn: conn}
 	go c.udpToTun()
 	c.tunToUdp()
 }
 type Client struct {
-	config     config.Config
-	iface      *water.Interface
-	localConn  *net.UDPConn
-	serverAddr *net.UDPAddr
+	config config.Config
+	iface  *water.Interface
+	conn   *net.UDPConn
 }
 
