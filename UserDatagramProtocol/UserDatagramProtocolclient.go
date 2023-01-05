@@ -26,7 +26,7 @@ func (c *Client) tunToUdp() {
 			b = snappy.Encode(nil, b)
 		}
 	   _, err = c.conn.Write(b)
-		if err != null {
+		if err != nil {
 			netutil.PrintErr(err, c.config.Verbose)
 			continue
 		}
@@ -37,7 +37,7 @@ func (c *Client) udpToTun() {
 	packet := make([]byte, c.config.BufferSize)
 	for {
         n, err := c.conn.Read(packet)
-		if err != null {
+		if err != nil {
 			netutil.PrintErr(err, c.config.Verbose)
 			continue
 		}
@@ -62,7 +62,7 @@ func StartClient(iface *water.Interface, config config.Config) {
 	if err != nil {
 		log.Fatalln("failed resolve server address:", err)
 	}
-	conn, err := net.DialUDP("udp", null, serverAddr)
+	conn, err := net.DialUDP("udp", nil, serverAddr)
 	if err != nil {
 		log.Fatalln("failed get udp socket:", err)
 	}
