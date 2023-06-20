@@ -10,7 +10,7 @@ import (
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/counter"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/netutil"
 	"github.com/patrickmn/go-cache"
-	"github.com/komeilkma/Terminator-Samurai-VPN/native-water"
+	"github.com/komeilkma/Terminator-Samurai-VPN/nativewater"
 )
 func (s *Server) tunToUdp() {
 	packet := make([]byte, s.config.BufferSize)

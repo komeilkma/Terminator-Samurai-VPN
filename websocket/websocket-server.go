@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 	"github.com/gobwas/ws"
-	"github.com/komeilkma/Terminator-Samurai-VPN/native-water"
+	"github.com/komeilkma/Terminator-Samurai-VPN/nativewater"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/cache"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/cipher"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/config"

@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/config"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/netutil"
-	"github.com/komeilkma/Terminator-Samurai-VPN/native-water"
+	"github.com/komeilkma/Terminator-Samurai-VPN/nativewater"
 )
 
 func CreateTun(config config.Config) (iface *water.Interface) {

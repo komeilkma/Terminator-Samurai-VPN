@@ -12,7 +12,7 @@ import (
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/netutil"
 	"github.com/xtaci/kcp-go"
 	"golang.org/x/crypto/pbkdf2"
-	"github.com/komeilkma/Terminator-Samurai-VPN/native-water"
+	"github.com/komeilkma/Terminator-Samurai-VPN/nativewater"
 )
 
 func StartClient(iFace *water.Interface, config config.Config) {

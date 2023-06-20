@@ -11,7 +11,7 @@ import (
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/config"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/counter"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/netutil"
-	"github.com/komeilkma/Terminator-Samurai-VPN/native-water"
+	"github.com/komeilkma/Terminator-Samurai-VPN/nativewater"
 )
 func StartServer(iFace *water.Interface, config config.Config) {
 	log.Printf("TSVPN tls server started on %v", config.LocalAddr)

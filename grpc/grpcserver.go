@@ -14,7 +14,7 @@ import (
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/netutil"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
-	"github.com/komeilkma/Terminator-Samurai-VPN/native-water"
+	"github.com/komeilkma/Terminator-Samurai-VPN/nativewater"
 )
 
 type StreamService struct {
