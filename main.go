@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"github.com/komeilkma/Terminator-Samurai-VPN/appfinal-app"
+	"github.com/komeilkma/Terminator-Samurai-VPN/finalapp"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/config"
 )
 

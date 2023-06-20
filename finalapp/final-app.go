@@ -1,8 +1,8 @@
-package final-app
+package finalapp
 
 import (
 	"github.com/komeilkma/Terminator-Samurai-VPN/kcp"
-	"github.com/komeilkma/Terminator-Samurai-VPN/quic-proto"
+	"github.com/komeilkma/Terminator-Samurai-VPN/quicproto"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/cipher"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/config"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/netutil"
@@ -11,7 +11,7 @@ import (
 	"github.com/komeilkma/Terminator-Samurai-VPN/tun"
 	"github.com/komeilkma/Terminator-Samurai-VPN/UserDatagramProtocol"
 	"github.com/komeilkma/Terminator-Samurai-VPN/websocket"
-	"github.com/komeilkma/Terminator-Samurai-VPN/native-water"
+	"github.com/komeilkma/Terminator-Samurai-VPN/nativewater"
 	"log"
 )
 
