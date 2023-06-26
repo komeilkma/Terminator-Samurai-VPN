@@ -1,7 +1,7 @@
 //go:build darwin
 // +build darwin
 
-package native-water
+package nativewater
 
 import (
 	"errors"

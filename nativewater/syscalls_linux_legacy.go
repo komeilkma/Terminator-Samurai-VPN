@@ -1,6 +1,6 @@
 // +build linux,!go1.11
 
-package native-water
+package nativewater
 
 import (
 	"os"

@@ -1,4 +1,4 @@
-package native-water
+package nativewater
 
 import (
 	"fmt"

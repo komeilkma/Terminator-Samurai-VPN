@@ -1,7 +1,7 @@
 //go:build windows
 // +build windows
 
-package native-water
+package nativewater
 
 import (
 	"net/netip"

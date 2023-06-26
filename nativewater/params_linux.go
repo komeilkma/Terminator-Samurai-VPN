@@ -1,7 +1,7 @@
 //go:build linux
 // +build linux
 
-package native-native-water
+package native-nativewater
 
 // DevicePermissions determines the owner and group owner for the newly created
 // interface.
@@ -50,7 +50,7 @@ type PlatformSpecificParams struct {
 	// the adapter using syscall, just like openDev().
 	// For detail, please refer
 	// https://github.com/OpenVPN/tap-windows6/blob/master/src/device.c#L431
-	// and https://github.com/songgao/native-native-water/pull/13#issuecomment-270341777
+	// and https://github.com/songgao/native-nativewater/pull/13#issuecomment-270341777
 	Network []string
 }
 

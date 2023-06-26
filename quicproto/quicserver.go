@@ -1,50 +1,60 @@
-package quic-proto
+package quicproto
 
 import (
 	"context"
 	"crypto/tls"
 	"log"
 	"time"
+
 	"github.com/golang/snappy"
 	"github.com/lucas-clemente/quic-go"
-	"github.com/komeilkma/Terminator-Samurai-VPN/native-water"
+	"github.com/komeilkma/Terminator-Samurai-VPN/nativewater"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/cache"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/cipher"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/config"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/counter"
 	"github.com/komeilkma/Terminator-Samurai-VPN/common/netutil"
+
 )
 
-func StartClient(iFace *water.Interface, config config.Config) {
-	log.Println("TSVPN quic client started")
-	tlsConfig := &tls.Config{
-		InsecureSkipVerify: config.TLSInsecureSkipVerify,
-		NextProtos:         []string{"TSVPN"},
+func StartServer(iface *water.Interface, config config.Config) {
+	log.Printf("TSVPN quic server started on %v", config.LocalAddr)
+	tlsCert, err := tls.LoadX509KeyPair(config.TLSCertificateFilePath, config.TLSCertificateKeyFilePath)
+	if err != nil {
+		log.Panic(err)
 	}
-	if config.TLSSni != "" {
-		tlsConfig.ServerName = config.TLSSni
+	var tlsConfig = &tls.Config{
+		Certificates: []tls.Certificate{tlsCert},
+		NextProtos:   []string{"TSVPN"},
 	}
-	go tunToQuic(config, iFace)
+	listener, err := quic.ListenAddr(config.LocalAddr, tlsConfig, nil)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	go toClient(config, iface)
 	for {
-		conn, err := quic.DialAddr(config.ServerAddr, tlsConfig, nil)
+		conn, err := listener.Accept(context.Background())
 		if err != nil {
 			netutil.PrintErr(err, config.Verbose)
-			time.Sleep(3 * time.Second)
 			continue
 		}
-		stream, err := conn.OpenStreamSync(context.Background())
-		if err != nil {
-			netutil.PrintErr(err, config.Verbose)
+		go func() {
+			for {
+				stream, err := conn.AcceptStream(context.Background())
+				if err != nil {
+					netutil.PrintErr(err, config.Verbose)
+					break
+				}
+
+				toServer(config, stream, iface)
+			}
 			conn.CloseWithError(quic.ApplicationErrorCode(0x01), "closed")
-			continue
-		}
-		cache.GetCache().Set("quicstream", stream, 24*time.Hour)
-		quicToTun(config, stream, iFace)
-		cache.GetCache().Delete("quicstream")
+		}()
 	}
 }
 
-func tunToQuic(config config.Config, iFace *water.Interface) {
+func toClient(config config.Config, iFace *water.Interface) {
 	packet := make([]byte, config.BufferSize)
 	shb := make([]byte, 2)
 	for {
@@ -53,34 +63,37 @@ func tunToQuic(config config.Config, iFace *water.Interface) {
 			netutil.PrintErr(err, config.Verbose)
 			continue
 		}
-		b := packet[:shn]
-		if config.Obfs {
-			b = cipher.XOR(b)
-		}
-		if config.Compress {
-			b = snappy.Encode(nil, b)
-		}
 		shb[0] = byte(shn >> 8 & 0xff)
 		shb[1] = byte(shn & 0xff)
-		copy(packet[len(shb):len(shb)+len(b)], b)
-		copy(packet[:len(shb)], shb)
-		if v, ok := cache.GetCache().Get("quicstream"); ok {
-			stream := v.(quic.Stream)
-			stream.SetWriteDeadline(time.Now().Add(time.Duration(config.Timeout) * time.Second))
-			n, err := stream.Write(packet[:len(shb)+len(b)])
-			if err != nil {
-				netutil.PrintErr(err, config.Verbose)
-				continue
+		b := packet[:shn]
+		if key := netutil.GetDstKey(b); key != "" {
+			if v, ok := cache.GetCache().Get(key); ok {
+				if config.Obfs {
+					b = cipher.XOR(b)
+				}
+				if config.Compress {
+					b = snappy.Encode(nil, b)
+				}
+				copy(packet[len(shb):len(shb)+len(b)], b)
+				copy(packet[:len(shb)], shb)
+				stream := v.(quic.Stream)
+				stream.SetWriteDeadline(time.Now().Add(time.Duration(config.Timeout) * time.Second))
+				n, err := stream.Write(packet[:len(shb)+len(b)])
+				if err != nil {
+					cache.GetCache().Delete(key)
+					netutil.PrintErr(err, config.Verbose)
+					continue
+				}
+				counter.IncrWrittenBytes(n)
 			}
-			counter.IncrWrittenBytes(n)
 		}
 	}
 }
 
-func quicToTun(config config.Config, stream quic.Stream, iFace *water.Interface) {
-	defer stream.Close()
+func toServer(config config.Config, stream quic.Stream, iface *water.Interface) {
 	packet := make([]byte, config.BufferSize)
 	shb := make([]byte, 2)
+	defer stream.Close()
 	for {
 		stream.SetReadDeadline(time.Now().Add(time.Duration(config.Timeout) * time.Second))
 		n, err := stream.Read(shb)
@@ -130,11 +143,14 @@ func quicToTun(config config.Config, stream quic.Stream, iFace *water.Interface)
 		if config.Obfs {
 			b = cipher.XOR(b)
 		}
-		n, err = iFace.Write(b)
-		if err != nil {
-			netutil.PrintErr(err, config.Verbose)
-			break
+		if key := netutil.GetSrcKey(b); key != "" {
+			cache.GetCache().Set(key, stream, 24*time.Hour)
+			n, err = iface.Write(b)
+			if err != nil {
+				netutil.PrintErr(err, config.Verbose)
+				break
+			}
+			counter.IncrReadBytes(n)
 		}
-		counter.IncrReadBytes(n)
 	}
 }

@@ -1,7 +1,7 @@
 //go:build !linux && !darwin && !windows
 // +build !linux,!darwin,!windows
 
-package native-water
+package nativewater
 
 // PlatformSpeficParams
 type PlatformSpecificParams struct {
