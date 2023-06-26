@@ -1,7 +1,7 @@
 //go:build linux
 // +build linux
 
-package native-water
+package nativewater
 
 import (
 	"os"

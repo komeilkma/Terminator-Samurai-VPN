@@ -1,6 +1,6 @@
 // +build darwin,go1.11
 
-package native-water
+package nativewater
 
 import "syscall"
 
